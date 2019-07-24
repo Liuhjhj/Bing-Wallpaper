@@ -123,7 +123,7 @@ class Ui_BingWallpaper(object):
                 "BingWallpaper",
                 "BingWallpaper"))
         self.read.setText(_translate("BingWallpaper", "Bing壁纸下载软件"))
-        self.read_2.setText(_translate("BingWallpaper", "可下载今日的Bing壁纸"))
+        self.read_2.setText(_translate("BingWallpaper", "可下载今日到未来7天的每日Bing壁纸"))
         self.download_file_label.setText(_translate("BingWallpaper", "下载目录:"))
         self.file.setPlaceholderText(
             _translate(
