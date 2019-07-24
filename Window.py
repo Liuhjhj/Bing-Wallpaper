@@ -9,17 +9,18 @@
 
 from PyQt5 import QtCore, QtGui, QtWidgets
 from PyQt5.QtWidgets import qApp, QDesktopWidget
-import getpass
+import getpass,os
 import DownloadMoudle
 
 
 class Ui_BingWallpaper(object):
     def setupUi(self, BingWallpaper):
+        current_dir = os.path.abspath(os.path.dirname(__file__))
         BingWallpaper.setObjectName("BingWallpaper")
         BingWallpaper.resize(400, 300)
         icon = QtGui.QIcon()
         icon.addPixmap(
-            QtGui.QPixmap("../../../../Pictures/2445.jpg"),
+            QtGui.QPixmap(current_dir+"/Icon.jpg"),
             QtGui.QIcon.Normal,
             QtGui.QIcon.Off)
         BingWallpaper.setWindowIcon(icon)
