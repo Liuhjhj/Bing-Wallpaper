@@ -9,7 +9,8 @@
 
 from PyQt5 import QtCore, QtGui, QtWidgets
 from PyQt5.QtWidgets import qApp, QDesktopWidget
-import getpass,os
+import getpass
+import os
 import DownloadMoudle
 
 
@@ -20,7 +21,7 @@ class Ui_BingWallpaper(object):
         BingWallpaper.resize(400, 300)
         icon = QtGui.QIcon()
         icon.addPixmap(
-            QtGui.QPixmap(current_dir+"/Icon.jpg"),
+            QtGui.QPixmap(current_dir + "/Icon.jpg"),
             QtGui.QIcon.Normal,
             QtGui.QIcon.Off)
         BingWallpaper.setWindowIcon(icon)
@@ -137,7 +138,6 @@ class Ui_BingWallpaper(object):
 
     def download_wallpaper(self):
         self.textEdit.clear()
-        self.num.clear()
         if self.file.text() == '':
             self.file.setText('/home/' + getpass.getuser() + '/Downloads/')
         if self.num.text() == '':
