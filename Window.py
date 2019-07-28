@@ -1,13 +1,11 @@
+# !/usr/bin/python3
 # -*- coding: utf-8 -*-
-
-# Form implementation generated from reading ui file 'Window.ui'
-#
-# Created by: PyQt5 UI code generator 5.13.0
-#
-# WARNING! All changes made in this file will be lost!
-
-
+"""
+@Author         :  Liuhjhj
+@File           :  Window-Thread.py
+"""
 from PyQt5 import QtCore, QtGui, QtWidgets
+from PyQt5.QtCore import QThread, pyqtSignal
 from PyQt5.QtWidgets import qApp, QDesktopWidget
 import getpass
 import os
@@ -138,31 +136,58 @@ class Ui_BingWallpaper(object):
 
     def download_wallpaper(self):
         self.textEdit.clear()
-        if self.file.text() == '':
-            self.file.setText('/home/' + getpass.getuser() + '/Downloads/')
-        if self.num.text() == '':
+        self.thread = thread_download(self.file.text(), self.num.text())
+        self.thread.append.connect(self.appendtext)
+        self.thread.set.connect(self.set)
+        self.thread.setfile.connect(self.setfile)
+        self.thread.start()
+
+    def appendtext(self, text):
+        self.textEdit.append(text)
+
+    def set(self, text):
+        self.textEdit.setText(text)
+
+    def setfile(self,text):
+        self.file.setText(text)
+
+
+class thread_download(QThread):
+    append = pyqtSignal(str)
+    set = pyqtSignal(str)
+    setfile = pyqtSignal(str)
+
+    def __init__(self, filepath, filenum, parent=None):
+        super(thread_download, self).__init__(parent)
+        self.filepath = filepath
+        self.filenum = filenum
+
+    def run(self):
+        if self.filepath == '':
+            self.setfile.emit('/home/' + getpass.getuser() + '/Downloads/')
+            self.filepath = '/home/' + getpass.getuser() + '/Downloads/'
+        if self.filenum == '':
             istp = DownloadMoudle.download_start()
         else:
             istp = DownloadMoudle.download_start(
-                self.num.text())
-
+                self.filenum)
         if istp == '' or istp == 'DownloadFail':
             print(istp)
-            self.textEdit.setText('下载失败')
+            self.set.emit('下载失败')
             return
+
         for wallpaper in istp:
             print('wallpaper=', wallpaper)
             url = wallpaper[7:-1]
-            filename = url[11:32]
-            filepath = self.file.text() + filename + '.jpg'
+            filename = url[11:32] + '.jpg'
             download_url = 'https://www.bing.com' + url
-            self.textEdit.append('开始下载' + filepath)
+            self.append.emit('开始下载' + self.filepath + filename)
             err = DownloadMoudle.download_file(
-                filepath, download_url)
+                self.filepath + filename, download_url)
             if err == 'Error':
-                self.textEdit.append('下载出错,请检查下载路径是否正确')
+                self.append.emit('下载出错,请检查下载路径是否正确')
                 return
-        self.textEdit.append('已完成下载任务')
+        self.append.emit('已完成下载任务')
 
 
 if __name__ == "__main__":
